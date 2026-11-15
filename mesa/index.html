@@ -333,6 +333,31 @@
   .macros div{background:var(--surface2); border-radius:10px; padding:8px 10px}
   .macros b{display:block; font-family:var(--font-m); font-size:14px; font-variant-numeric:tabular-nums}
   .macros span{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+  .saldo-grade{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px}
+  .saldo-grade > div{background:var(--surface2); border-radius:10px; padding:10px 11px; min-width:0}
+  .saldo-grade .valor{display:block; font-family:var(--font-d); font-size:25px; font-weight:600; line-height:1.2; font-variant-numeric:tabular-nums}
+  .saldo-grade .rotulo{display:block; font-size:11px; color:var(--muted); margin-top:4px; line-height:1.4}
+  .saldo-resultado{margin-top:12px; padding:12px; border:1px solid var(--ok); background:var(--ok-soft); border-radius:11px}
+  .saldo-resultado.superavit{border-color:var(--stop); background:var(--stop-soft)}
+  .saldo-resultado .rotulo{display:block; font-size:12px; letter-spacing:.03em; font-weight:600}
+  .saldo-resultado .valor{display:block; font-family:var(--font-d); font-size:30px; font-weight:600; line-height:1.3; font-variant-numeric:tabular-nums}
+  .saldo-atividade{border-left:3px solid var(--accent); padding-left:11px; margin-top:12px; font-size:13px; line-height:1.5; color:var(--ink2)}
+  .agua-resumo{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-top:10px}
+  .agua-resumo strong{font-family:var(--font-d); font-weight:600; font-size:29px; line-height:1.1; font-variant-numeric:tabular-nums}
+  .agua-resumo span{font-size:12px; color:var(--muted)}
+  .agua-barra{height:11px; background:var(--surface2); border-radius:20px; overflow:hidden; border:1px solid var(--line); margin-top:10px}
+  .agua-barra i{display:block; height:100%; background:var(--accent); transition:width .2s}
+  .agua-presets{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; margin-top:12px}
+  .agua-presets button{min-height:45px; border-radius:10px; background:var(--accent-soft); color:var(--ink); border:1px solid var(--accent); font-family:var(--font-m); font-size:13px; font-weight:600}
+  .agua-registro{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:9px}
+  .agua-registro input{flex:1 1 110px}
+  .agua-registro button{flex:1 1 138px}
+  .agua-historico{font-size:12px; color:var(--ink2); margin-top:8px; line-height:1.5}
+  .proteina-painel{display:flex; align-items:baseline; flex-wrap:wrap; column-gap:12px; row-gap:4px; margin-top:10px}
+  .proteina-painel strong{font-family:var(--font-d); font-size:29px; line-height:1.1}
+  .proteina-painel span{font-size:12px; color:var(--muted)}
+  .proteina-barra{height:11px; background:var(--surface2); border-radius:20px; overflow:hidden; border:1px solid var(--line); margin-top:10px}
+  .proteina-barra i{display:block; height:100%; background:var(--ok); transition:width .2s}
   .peso-row{display:flex; gap:8px; margin-top:10px}
   input.txt{width:100%; height:48px; border:1px solid var(--line); border-radius:11px; padding:0 12px; font-size:17px;
     background:var(--surface); color:var(--ink); font-family:var(--font-m); font-variant-numeric:tabular-nums}
@@ -418,8 +443,12 @@
   <div id="setup"></div>
   <div id="aviso"></div>
   <section class="card" id="resumo"></section>
+  <section class="card" id="agua"></section>
+  <section class="card" id="proteina"></section>
   <section class="card" id="peso"></section>
   <section class="card" id="caminhada"></section>
+  <section class="card" id="atividade"></section>
+  <section class="card" id="balanco"></section>
   <div id="refeicoes"></div>
   <div class="row-btns"><button class="btn ghost" id="btn-add-ref" type="button">+ Refeição extra</button></div>
   <p class="status" id="status"></p>
@@ -1924,7 +1953,7 @@
     const rot = el("div", null, diaAtual === HOJE ? "Hoje" : (diaAtual === somaDias(HOJE, -1) ? "Ontem" : DIAS[deIso(diaAtual).getDay()]));
     $("dia-rot").appendChild(rot); $("dia-rot").appendChild(el("small", null, br(diaAtual)));
     $("dia-prox").disabled = diaAtual >= HOJE;
-    renderSetup(); renderResumo(); renderPeso(); renderCaminhada(); renderRefeicoes(); renderDock();
+    renderSetup(); renderResumo(); renderAgua(); renderProteina(); renderPeso(); renderCaminhada(); renderAtividade(); renderBalanco(); renderRefeicoes(); renderDock();
   }
 
   function renderSetup(){
@@ -1993,6 +2022,147 @@
     c.appendChild(info);
   }
 
+  /* ÁGUA: metas próprias do Caderno (4 L com treino, 3,5 L sem treino).
+     Lançamentos sucessivos ficam em dias[d].agua, preservados no backup.
+     A exceção manual altera apenas a meta hídrica, nunca o plano alimentar. */
+  function metaAgua(d){
+    const r = dia(d) || {};
+    const treino = typeof r.aguaTreino === "boolean" ? r.aguaTreino : (!!treinoNoCaderno(d) || tipoDoDia(d) === "treino");
+    return { treino:treino, ml:treino ? 4000 : 3500, manual:typeof r.aguaTreino === "boolean" };
+  }
+  function eventosAgua(d){ const r = dia(d); return r && Array.isArray(r.agua) ? r.agua : []; }
+  function totalAgua(d){ return eventosAgua(d).reduce(function(s,x){ return s + (Number(x.ml) > 0 ? Number(x.ml) : 0); },0); }
+  function adicionarAgua(d, ml){
+    const v = Math.round(Number(ml));
+    if(!(v > 0 && v <= 1000)) return false;
+    const r = garantirDia(d); if(!Array.isArray(r.agua)) r.agua = [];
+    r.agua.push({ ml:v, em:new Date().toISOString() }); salvarDias(); render(); return true;
+  }
+  function renderAgua(){
+    const c = $("agua"); c.textContent = "";
+    const conf = metaAgua(diaAtual), eventos = eventosAgua(diaAtual), total = totalAgua(diaAtual);
+    const resta = Math.max(0, conf.ml - total);
+    c.appendChild(el("h2", null, "Controle de água"));
+    const linha = el("div", "agua-resumo");
+    linha.appendChild(el("strong", null, num(total) + " / " + num(conf.ml) + " mL"));
+    linha.appendChild(el("span", null, resta ? "Faltam " + num(resta) + " mL" : (total === conf.ml ? "Meta atingida" : "Acima da meta por " + num(total - conf.ml) + " mL")));
+    c.appendChild(linha);
+    const barra = el("div", "agua-barra"), i = el("i");
+    i.style.width = Math.min(100, total / conf.ml * 100) + "%";
+    barra.setAttribute("role", "progressbar"); barra.setAttribute("aria-label", "Progresso de ingestão de água");
+    barra.setAttribute("aria-valuemin", "0"); barra.setAttribute("aria-valuemax", String(conf.ml));
+    barra.setAttribute("aria-valuenow", String(Math.min(total, conf.ml)));
+    barra.appendChild(i); c.appendChild(barra);
+
+    const escolha = el("div", "seg");
+    [[true,"Dia com treino · 4 L"],[false,"Sem treino · 3,5 L"]].forEach(function(item){
+      const b = el("button", null, item[1]); b.type = "button";
+      b.setAttribute("aria-pressed", String(item[0] === conf.treino));
+      b.addEventListener("click", function(){ const r = garantirDia(diaAtual); r.aguaTreino = item[0]; salvarDias(); render(); });
+      escolha.appendChild(b);
+    });
+    c.appendChild(escolha);
+    c.appendChild(el("p", "info", "Meta " + (conf.manual ? "ajustada para este dia" : "automática pelo plano ou treino registrado") + ". Cada dose soma ao consumo do dia e reduz o saldo."));
+
+    const presets = el("div", "agua-presets");
+    [200,250,300,500].forEach(function(ml){
+      const b = el("button", null, "+" + ml + " mL"); b.type = "button";
+      b.setAttribute("aria-label", "Registrar " + ml + " mililitros de água");
+      b.addEventListener("click", function(){ adicionarAgua(diaAtual, ml); });
+      presets.appendChild(b);
+    });
+    c.appendChild(presets);
+    const entrada = el("div", "agua-registro"), inp = el("input", "txt");
+    inp.inputMode = "numeric"; inp.placeholder = "Outra quantidade (mL)";
+    inp.setAttribute("aria-label", "Quantidade personalizada de água, em mililitros");
+    entrada.appendChild(inp);
+    entrada.appendChild(botao("Adicionar água", "", function(){
+      const ml = lerNum(inp.value);
+      if(!(ml > 0 && ml <= 1000)){ msg(c, "Digite uma quantidade entre 1 e 1.000 mL por registro.", "err"); return; }
+      adicionarAgua(diaAtual, ml);
+    }));
+    c.appendChild(entrada);
+    if(eventos.length){
+      const ultimos = eventos.slice(-4).reverse().map(function(ev){
+        const data = ev.em ? new Date(ev.em) : null;
+        const hora = data && !isNaN(data.getTime()) ? data.toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" }) + " · " : "";
+        return hora + num(Number(ev.ml) || 0) + " mL";
+      });
+      c.appendChild(el("div", "agua-historico", "Últimos registros: " + ultimos.join(" · ") + "."));
+      const b = el("div", "btns");
+      b.appendChild(botao("Desfazer última dose", "ghost", function(){
+        const r = garantirDia(diaAtual); if(Array.isArray(r.agua) && r.agua.length) r.agua.pop();
+        salvarDias(); render();
+      }));
+      c.appendChild(b);
+    }
+    c.appendChild(el("p", "note", "O plano recomenda concentrar a hidratação mais cedo para proteger o sono; o registro não é bloqueado depois das 20h. Se houver prescrição médica de outra quantidade ou restrição hídrica, prevalece a orientação médica."));
+  }
+
+  /* PROTEÍNA: objetivo operacional de 200 g/dia (~2,2 g/kg aos 90,5 kg).
+     Não altera as porções planejadas: monitora consumo registrado e permite
+     ajuste clínico. A meta fica no perfil, que integra o backup completo. */
+  function metaProteina(){
+    return perfil && Number(perfil.metaProteina) > 0 ? Math.round(Number(perfil.metaProteina)) : 200;
+  }
+  function relatorioSemanal(dFim){
+    const meta = metaProteina(), dIni = somaDias(dFim, -6), linhas = [];
+    linhas.push("MESA DE FERRO · Proteína e hidratação · " + br(dIni) + " a " + br(dFim));
+    linhas.push("Meta de proteína: " + num(meta) + " g/dia");
+    linhas.push("Data | Proteína confirmada | Água | Situação alimentar");
+    const completos = [];
+    for(let i = 6; i >= 0; i--){
+      const d = somaDias(dFim, -i), reg = dia(d), total = reg ? totaisDia(planoDoDia(d)).reg.p : null;
+      const completo = !!reg && diaCompleto(d), agua = totalAgua(d);
+      linhas.push(br(d) + " | " + (reg ? num(Math.round(total)) + " g" : "sem registro") +
+        " | " + (reg && Array.isArray(reg.agua) ? num(agua) + "/" + num(metaAgua(d).ml) + " mL" : "sem registro") +
+        " | " + (completo ? "completo" : "parcial/sem registro"));
+      if(completo) completos.push(total);
+    }
+    if(completos.length){
+      const media = completos.reduce(function(s,x){return s+x;},0) / completos.length;
+      linhas.push("Média da proteína em " + completos.length + " dia(s) completos: " + num(Math.round(media)) + " g/dia");
+    } else linhas.push("Sem dias completos suficientes para calcular média de proteína.");
+    linhas.push("Valores estimados a partir das porções alimentares registradas na Mesa.");
+    return linhas.join("\n");
+  }
+  function renderProteina(){
+    const c = $("proteina"); c.textContent = "";
+    const meta = metaProteina(), tt = totaisDia(planoDoDia(diaAtual));
+    const consumida = Math.round(tt.reg.p), planejada = Math.round(tt.plan.p);
+    const falta = Math.max(0, meta - consumida), pct = Math.min(100, consumida / meta * 100);
+    c.appendChild(el("h2", null, "Proteína diária · hipertrofia"));
+    const painel = el("div", "proteina-painel");
+    painel.appendChild(el("strong", null, num(consumida) + " / " + num(meta) + " g"));
+    painel.appendChild(el("span", null, falta > 0 ? "Faltam " + num(falta) + " g para a meta" : "Meta alcançada"));
+    c.appendChild(painel);
+    const barra = el("div", "proteina-barra"), i = el("i"); i.style.width = pct + "%";
+    barra.setAttribute("role", "progressbar"); barra.setAttribute("aria-label", "Progresso da meta diária de proteína");
+    barra.setAttribute("aria-valuemin", "0"); barra.setAttribute("aria-valuemax", String(meta));
+    barra.setAttribute("aria-valuenow", String(Math.min(meta, consumida))); barra.appendChild(i); c.appendChild(barra);
+    c.appendChild(el("p", "info", "Planejado: " + num(planejada) + " g. A barra usa apenas proteínas de refeições confirmadas, não as previstas."));
+    const com = [];
+    for(let j=0;j<7;j++){
+      const d = somaDias(diaAtual, -j);
+      if(dia(d) && diaCompleto(d)) com.push(totaisDia(planoDoDia(d)).reg.p);
+    }
+    if(com.length) c.appendChild(el("p", "info", "Média em " + com.length + " dia(s) completos dos últimos 7: " + num(Math.round(com.reduce(function(s,x){return s+x;},0) / com.length)) + " g/dia."));
+    else c.appendChild(el("p", "info", "A média semanal aparecerá quando houver dias com alimentação completamente registrada."));
+    const linha = el("div", "agua-registro"), inp = el("input", "txt");
+    inp.inputMode = "numeric"; inp.value = String(meta); inp.setAttribute("aria-label", "Meta diária de proteína em gramas");
+    linha.appendChild(inp);
+    linha.appendChild(botao("Ajustar meta", "ghost", function(){
+      const v = Math.round(lerNum(inp.value));
+      if(!(v >= 40 && v <= 350)){ msg(c, "Informe uma meta entre 40 e 350 g/dia, conforme orientação profissional.", "err"); return; }
+      if(!perfil){ msg(c, "Cadastre o perfil antes de ajustar a meta.", "err"); return; }
+      perfil.metaProteina = v; lsSet("mdf:perfil", perfil); render();
+    }));
+    c.appendChild(linha);
+    const b = el("div", "btns"), botaoRelatorio = botao("Copiar resumo de 7 dias", "", function(){ copiar(relatorioSemanal(diaAtual), botaoRelatorio); });
+    b.appendChild(botaoRelatorio); c.appendChild(b);
+    c.appendChild(el("p", "note", "Meta operacional inicial de 200 g/dia, ajustável pelo seu médico. O resumo copia os últimos sete dias, identificando os dias incompletos."));
+  }
+
   function renderPeso(){
     const c = $("peso"); c.textContent = "";
     const reg = dia(diaAtual);
@@ -2055,6 +2225,102 @@
     c.appendChild(b);
     c.appendChild(el("p", "info", (cm ? "Registrada" + (cm.fonte && cm.fonte !== "manual" ? " pelo " + cm.fonte : "") + ": " + textoCaminhada(cm) + ". " : "")
       + "Só registro: a caminhada não muda a meta do dia, porque o gasto que a define já inclui a sua rotina."));
+  }
+
+  /* ATIVIDADE COMPLEMENTAR. A musculação tem estimativa independente no
+     relógio; os passos totais incluem os da caminhada monitorada. Não
+     transformamos os passos restantes em calorias com fator arbitrário. */
+  function renderAtividade(){
+    const c = $("atividade"); c.textContent = "";
+    const reg = dia(diaAtual), atual = reg && reg.ativ;
+    c.appendChild(el("h2", null, "Musculação e passos do dia"));
+    c.appendChild(el("p", "info", "Anote o gasto estimado da musculação e os passos TOTAIS exibidos pelo Samsung Health, de preferência ao fim do dia."));
+    const grade = el("div", "grid2"), campos = {};
+    [["musculoMin","Musculação (min)"],["musculoKcal","Musculação (kcal do relógio)"],["passosDia","Passos totais do dia"]].forEach(function(f){
+      const w = el("div"); w.appendChild(el("label", null, f[1]));
+      const i = el("input", "txt"); i.inputMode = "decimal"; i.id = "ativ-" + f[0];
+      if(atual && isFinite(atual[f[0]])) i.value = String(atual[f[0]]).replace(".", ",");
+      campos[f[0]] = i; w.appendChild(i); grade.appendChild(w);
+    });
+    c.appendChild(grade);
+    const b = el("div", "btns");
+    b.appendChild(botao(atual ? "Atualizar atividade" : "Salvar atividade", "", function(){
+      const v = {};
+      Object.keys(campos).forEach(function(k){
+        if(!String(campos[k].value).trim()) return;
+        const x = lerNum(campos[k].value); if(isFinite(x) && x >= 0) v[k] = Math.round(x);
+      });
+      if(!Object.keys(v).length){ msg(c, "Preencha pelo menos um campo de atividade.", "err"); return; }
+      if((v.musculoMin != null && v.musculoMin > 600) || (v.musculoKcal != null && v.musculoKcal > 3000) || (v.passosDia != null && v.passosDia > 100000)){
+        msg(c, "Confira os valores de duração, calorias e passos do dia.", "err"); return;
+      }
+      const d = garantirDia(diaAtual); d.ativ = Object.assign(v, { fonte:"manual" }); salvarDias(); render();
+    }));
+    if(atual) b.appendChild(botao("Apagar atividade", "ghost", function(){ const d = garantirDia(diaAtual); delete d.ativ; salvarDias(); render(); }));
+    c.appendChild(b);
+    c.appendChild(el("p", "note", "Os passos diários incluem a caminhada. A Mesa separa os passos fora dela; não soma as duas contagens."));
+  }
+
+  /* BALANÇO DIÁRIO: gasto de referência menos ingestão. Durante o dia usa
+     a projeção completa, não o consumo parcial. As calorias de atividades
+     ficam visíveis, mas não se somam outra vez ao gasto habitual. */
+  function renderBalanco(){
+    const c = $("balanco"); c.textContent = "";
+    c.appendChild(el("h2", null, "Balanço energético estimado"));
+    const g = gastoAtual(), reg = dia(diaAtual) || {}, cm = reg.cam || {}, at = reg.ativ || {};
+    const pl = planoDoDia(diaAtual), tt = totaisDia(pl), completo = diaCompleto(diaAtual);
+    if(!(g > 0)){
+      c.appendChild(el("p", "info", "Salve o perfil e o gasto inicial para estimar o balanço energético.")); return;
+    }
+    const grade = el("div", "saldo-grade");
+    function dado(rotulo, valor){
+      const w = el("div"); w.appendChild(el("span", "valor", valor)); w.appendChild(el("span", "rotulo", rotulo)); grade.appendChild(w);
+    }
+    dado("Gasto diário de referência (inclui atividade habitual)", num(g) + " kcal");
+    dado("Consumo confirmado", num(tt.reg.kcal) + " kcal");
+    dado("Consumo no plano completo", num(tt.plan.kcal) + " kcal");
+    dado("Meta alimentar (não muda com o relógio)", pl.meta == null ? "–" : num(pl.meta) + " kcal");
+    c.appendChild(grade);
+    const saldo = Math.round(g - (completo ? tt.reg.kcal : tt.plan.kcal));
+    const resultado = el("div", "saldo-resultado" + (saldo < 0 ? " superavit" : ""));
+    resultado.appendChild(el("span", "rotulo", (completo ? "Dia concluído · " : "Dia aberto · projeção pelo plano · ") + (saldo >= 0 ? "déficit" : "superávit")));
+    resultado.appendChild(el("span", "valor", num(Math.abs(saldo)) + " kcal"));
+    c.appendChild(resultado);
+    if(!completo) c.appendChild(el("p", "info", "O consumo confirmado ainda é parcial. Para a projeção, usamos o plano completo; ao concluir todas as refeições, o balanço passa a usar apenas o que foi consumido."));
+
+    const caminKcal = isFinite(cm.kcal) ? Number(cm.kcal) : null;
+    const musculoKcal = isFinite(at.musculoKcal) ? Number(at.musculoKcal) : null;
+    const passosCam = isFinite(cm.passos) ? Number(cm.passos) : null;
+    const passosDia = isFinite(at.passosDia) ? Number(at.passosDia) : null;
+    const movimento = el("div", "saldo-atividade");
+    movimento.appendChild(el("b", null, "Atividades registradas (controle, sem somar novamente)"));
+    const linhas = [];
+    linhas.push("Caminhada: " + (caminKcal == null ? "não informada" : num(caminKcal) + " kcal do relógio"));
+    linhas.push("Musculação: " + (musculoKcal == null ? "não informada" : num(musculoKcal) + " kcal do relógio"));
+    if(caminKcal != null && musculoKcal != null) linhas.push("Subtotal das atividades monitoradas: " + num(caminKcal + musculoKcal) + " kcal do relógio");
+    linhas.push("Passos totais: " + (passosDia == null ? "não informados" : num(passosDia)));
+    linhas.push("Passos na caminhada: " + (passosCam == null ? "não informados" : num(passosCam)));
+    if(passosDia != null && passosCam != null){
+      linhas.push(passosDia >= passosCam
+        ? "Passos fora da caminhada: " + num(passosDia - passosCam)
+        : "Passos totais menores que os da caminhada: confira o total no fim do dia.");
+    }
+    linhas.forEach(function(s){ movimento.appendChild(el("div", null, s)); });
+    c.appendChild(movimento);
+
+    const diasCompletos = [];
+    for(let i = 0; i < 7; i++){
+      const data = somaDias(diaAtual, -i);
+      if(dias[data] && diaCompleto(data)) diasCompletos.push(Math.round(g - totaisDia(planoDoDia(data)).reg.kcal));
+    }
+    if(diasCompletos.length >= 3){
+      const media = Math.round(diasCompletos.reduce(function(a,b){return a+b;},0) / diasCompletos.length);
+      c.appendChild(el("p", "info", "Média aproximada do balanço em " + diasCompletos.length + " dia(s) completos dos últimos 7: " +
+        (media >= 0 ? "déficit de " : "superávit de ") + num(Math.abs(media)) + " kcal/dia, usando o gasto de referência atual."));
+    } else {
+      c.appendChild(el("p", "info", "A média do déficit aparecerá após pelo menos três dias com alimentação completamente registrada, dentro de uma janela de sete dias."));
+    }
+    c.appendChild(el("p", "note", "O gasto de referência é uma estimativa média, não uma medição do dia. Caminhada, musculação e passos ajudam a avaliar se a atividade habitual mudou. Os passos fora da caminhada não recebem o mesmo gasto por passo, pois a intensidade é diferente. Não acrescente as calorias do relógio ao gasto de referência sem calibrar a rotina pelas tendências de peso."));
   }
 
   /* Importação do Samsung Health. O app no navegador não lê os dados de saúde
