@@ -342,6 +342,7 @@
   .info b{font-family:var(--font-m); font-weight:600}
   .meal{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); margin-top:10px; overflow:hidden}
   .meal.ok{border-color:var(--ok)}
+  .meal.pulada{border-style:dashed; opacity:.87}
   .meal-head{display:flex; align-items:center; gap:10px; width:100%; padding:12px 14px; background:none; border:0; text-align:left}
   .meal-head .h{font-family:var(--font-m); font-size:12px; color:var(--muted); min-width:44px}
   .meal-head .t{flex:1; font-family:var(--font-d); font-size:17px; font-weight:600; letter-spacing:.02em}
@@ -480,12 +481,11 @@
     "alavancas": {
       "tolerancia": 25,
       "subir": [
-        "aveia",
+        "arroz_integral",
         "pao_integral"
       ],
       "descer": [
         "arroz_integral",
-        "aveia",
         "pao_integral"
       ]
     },
@@ -511,6 +511,26 @@
         "f": 9.1,
         "fonte": "TACO"
       },
+      "farelo_aveia": {
+        "n": "Farelo de aveia cru",
+        "grupo": "carboidrato",
+        "kcal": 246,
+        "p": 17.3,
+        "c": 66.22,
+        "g": 7.03,
+        "f": 15.4,
+        "fonte": "USDA SR28, Oat bran, raw; confira rótulo"
+      },
+      "farinha_aveia": {
+        "n": "Farinha de aveia",
+        "grupo": "carboidrato",
+        "kcal": 394,
+        "p": 13.9,
+        "c": 66.6,
+        "g": 8.5,
+        "f": 9.1,
+        "fonte": "estimativa por flocos; conferir rótulo"
+      },
       "leite_desnatado": {
         "n": "Leite desnatado",
         "grupo": "laticinio",
@@ -521,6 +541,39 @@
         "g": 0,
         "f": 0,
         "fonte": "TACO"
+      },
+      "leite_semidesnatado": {
+        "n": "Leite semidesnatado",
+        "grupo": "laticinio",
+        "unid": "ml",
+        "kcal": 46,
+        "p": 3.1,
+        "c": 4.8,
+        "g": 1.5,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
+      },
+      "leite_integral": {
+        "n": "Leite integral",
+        "grupo": "laticinio",
+        "unid": "ml",
+        "kcal": 61,
+        "p": 3.2,
+        "c": 4.8,
+        "g": 3.3,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
+      },
+      "leite_zero_lactose": {
+        "n": "Leite desnatado zero lactose",
+        "grupo": "laticinio",
+        "unid": "ml",
+        "kcal": 36,
+        "p": 3.4,
+        "c": 5.1,
+        "g": 0,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
       },
       "whey": {
         "n": "Whey Growth 80%",
@@ -536,6 +589,34 @@
         },
         "fonte": "rótulo"
       },
+      "whey_isolado": {
+        "n": "Proteína isolada do soro (whey isolado)",
+        "grupo": "suplemento",
+        "kcal": 375,
+        "p": 85,
+        "c": 4,
+        "g": 2,
+        "f": 0,
+        "porcao": {
+          "nome": "dosador",
+          "g": 30
+        },
+        "fonte": "estimativa; conferir rótulo"
+      },
+      "proteina_ervilha": {
+        "n": "Proteína em pó de ervilha",
+        "grupo": "suplemento",
+        "kcal": 385,
+        "p": 80,
+        "c": 5,
+        "g": 6,
+        "f": 0,
+        "porcao": {
+          "nome": "dosador",
+          "g": 30
+        },
+        "fonte": "estimativa; conferir rótulo"
+      },
       "iogurte": {
         "n": "Iogurte natural, 14 g de proteína",
         "grupo": "laticinio",
@@ -550,6 +631,26 @@
         },
         "fonte": "rótulo informado; confira as kcal do pote"
       },
+      "iogurte_natural": {
+        "n": "Iogurte natural sem açúcar",
+        "grupo": "laticinio",
+        "kcal": 62,
+        "p": 3.5,
+        "c": 4.7,
+        "g": 3.3,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
+      },
+      "skyr": {
+        "n": "Iogurte tipo skyr natural",
+        "grupo": "laticinio",
+        "kcal": 63,
+        "p": 11,
+        "c": 4,
+        "g": 0.2,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
+      },
       "ricota": {
         "n": "Ricota",
         "grupo": "laticinio",
@@ -563,6 +664,26 @@
           "g": 25
         },
         "fonte": "TACO"
+      },
+      "cottage": {
+        "n": "Queijo cottage",
+        "grupo": "laticinio",
+        "kcal": 98,
+        "p": 11.1,
+        "c": 3.4,
+        "g": 4.3,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
+      },
+      "minas_frescal": {
+        "n": "Queijo minas frescal",
+        "grupo": "laticinio",
+        "kcal": 264,
+        "p": 17.4,
+        "c": 3.2,
+        "g": 20.2,
+        "f": 0,
+        "fonte": "referência aproximada; conferir rótulo"
       },
       "cheddar_light": {
         "n": "Cheddar light Polenghi",
@@ -601,6 +722,36 @@
         "g": 2.5,
         "f": 0,
         "fonte": "TACO"
+      },
+      "frango_cru": {
+        "n": "Peito de frango cru",
+        "grupo": "proteina",
+        "kcal": 119,
+        "p": 21.5,
+        "c": 0,
+        "g": 3,
+        "f": 0,
+        "fonte": "referência aproximada; peso cru"
+      },
+      "peru_assado": {
+        "n": "Peito de peru assado (carne)",
+        "grupo": "proteina",
+        "kcal": 135,
+        "p": 29,
+        "c": 0,
+        "g": 1.6,
+        "f": 0,
+        "fonte": "referência aproximada; não é embutido"
+      },
+      "tilapia": {
+        "n": "Tilápia grelhada",
+        "grupo": "proteina",
+        "kcal": 128,
+        "p": 26,
+        "c": 0,
+        "g": 2.7,
+        "f": 0,
+        "fonte": "referência aproximada; peso pronto"
       },
       "patinho": {
         "n": "Patinho grelhado",
@@ -686,6 +837,16 @@
         },
         "fonte": "rótulo típico"
       },
+      "sardinha": {
+        "n": "Sardinha em conserva, drenada",
+        "grupo": "proteina",
+        "kcal": 208,
+        "p": 24.6,
+        "c": 0,
+        "g": 11.5,
+        "f": 0,
+        "fonte": "referência aproximada; conferir óleo e rótulo"
+      },
       "ovo": {
         "n": "Ovo cozido",
         "grupo": "proteina",
@@ -700,6 +861,20 @@
         },
         "fonte": "TACO"
       },
+      "clara_ovo": {
+        "n": "Clara de ovo cozida",
+        "grupo": "proteina",
+        "kcal": 52,
+        "p": 10.9,
+        "c": 0.7,
+        "g": 0.2,
+        "f": 0,
+        "porcao": {
+          "nome": "clara",
+          "g": 30
+        },
+        "fonte": "referência aproximada"
+      },
       "pao_integral": {
         "n": "Pão de forma integral",
         "grupo": "carboidrato",
@@ -713,6 +888,40 @@
           "g": 25
         },
         "fonte": "TACO"
+      },
+      "pao_frances": {
+        "n": "Pão francês",
+        "grupo": "carboidrato",
+        "kcal": 300,
+        "p": 8,
+        "c": 58.6,
+        "g": 3.1,
+        "f": 2.3,
+        "porcao": {
+          "nome": "unidade",
+          "g": 50
+        },
+        "fonte": "referência aproximada"
+      },
+      "tapioca": {
+        "n": "Goma de tapioca hidratada",
+        "grupo": "carboidrato",
+        "kcal": 160,
+        "p": 0.2,
+        "c": 40,
+        "g": 0,
+        "f": 0,
+        "fonte": "estimativa; conferir marca e peso da goma"
+      },
+      "wrap_integral": {
+        "n": "Wrap integral",
+        "grupo": "carboidrato",
+        "kcal": 290,
+        "p": 9,
+        "c": 50,
+        "g": 6,
+        "f": 5,
+        "fonte": "estimativa; conferir rótulo"
       },
       "pao_brioche": {
         "n": "Pão de hambúrguer brioche",
@@ -738,6 +947,26 @@
         "f": 2.7,
         "fonte": "TACO"
       },
+      "arroz_branco": {
+        "n": "Arroz branco cozido",
+        "grupo": "carboidrato",
+        "kcal": 128,
+        "p": 2.5,
+        "c": 28.1,
+        "g": 0.2,
+        "f": 1.6,
+        "fonte": "referência aproximada; peso pronto"
+      },
+      "macarrao": {
+        "n": "Macarrão cozido sem molho",
+        "grupo": "carboidrato",
+        "kcal": 157,
+        "p": 5.8,
+        "c": 30.8,
+        "g": 0.9,
+        "f": 1.8,
+        "fonte": "referência aproximada; peso pronto"
+      },
       "batata_doce": {
         "n": "Batata-doce cozida",
         "grupo": "carboidrato",
@@ -747,6 +976,26 @@
         "g": 0.1,
         "f": 2.2,
         "fonte": "TACO"
+      },
+      "batata_inglesa": {
+        "n": "Batata inglesa cozida",
+        "grupo": "carboidrato",
+        "kcal": 52,
+        "p": 1.2,
+        "c": 11.9,
+        "g": 0,
+        "f": 1.3,
+        "fonte": "referência aproximada; peso pronto"
+      },
+      "mandioca": {
+        "n": "Mandioca cozida",
+        "grupo": "carboidrato",
+        "kcal": 125,
+        "p": 0.6,
+        "c": 30,
+        "g": 0.3,
+        "f": 1.6,
+        "fonte": "referência aproximada; peso pronto"
       },
       "batata_prefrita": {
         "n": "Batata pré-frita (pesar congelada)",
@@ -778,6 +1027,26 @@
         "f": 7.9,
         "fonte": "TACO"
       },
+      "grao_bico": {
+        "n": "Grão-de-bico cozido",
+        "grupo": "leguminosa",
+        "kcal": 164,
+        "p": 8.9,
+        "c": 27.4,
+        "g": 2.6,
+        "f": 7.6,
+        "fonte": "referência aproximada; peso pronto"
+      },
+      "ervilha": {
+        "n": "Ervilha cozida",
+        "grupo": "leguminosa",
+        "kcal": 84,
+        "p": 5.4,
+        "c": 15.6,
+        "g": 0.2,
+        "f": 5.5,
+        "fonte": "referência aproximada; peso pronto"
+      },
       "brocolis": {
         "n": "Brócolis cozido",
         "grupo": "legume",
@@ -788,6 +1057,36 @@
         "f": 3.4,
         "fonte": "TACO"
       },
+      "couve_flor": {
+        "n": "Couve-flor cozida",
+        "grupo": "legume",
+        "kcal": 23,
+        "p": 1.9,
+        "c": 4.2,
+        "g": 0.4,
+        "f": 2.1,
+        "fonte": "referência aproximada"
+      },
+      "abobrinha": {
+        "n": "Abobrinha cozida",
+        "grupo": "legume",
+        "kcal": 24,
+        "p": 1.1,
+        "c": 4.8,
+        "g": 0.4,
+        "f": 1.6,
+        "fonte": "referência aproximada"
+      },
+      "vagem": {
+        "n": "Vagem cozida",
+        "grupo": "legume",
+        "kcal": 35,
+        "p": 2,
+        "c": 7.9,
+        "g": 0.3,
+        "f": 3.2,
+        "fonte": "referência aproximada"
+      },
       "tomate_cereja": {
         "n": "Tomate-cereja",
         "grupo": "legume",
@@ -797,6 +1096,26 @@
         "g": 0.2,
         "f": 1.2,
         "fonte": "TACO (tomate cru)"
+      },
+      "tomate": {
+        "n": "Tomate comum cru",
+        "grupo": "legume",
+        "kcal": 15,
+        "p": 1.1,
+        "c": 3.1,
+        "g": 0.2,
+        "f": 1.2,
+        "fonte": "TACO (tomate cru)"
+      },
+      "pepino": {
+        "n": "Pepino cru",
+        "grupo": "legume",
+        "kcal": 15,
+        "p": 0.7,
+        "c": 3.6,
+        "g": 0.1,
+        "f": 0.5,
+        "fonte": "referência aproximada"
       },
       "cenoura_crua": {
         "n": "Cenoura ralada",
@@ -832,6 +1151,36 @@
         },
         "fonte": "TACO"
       },
+      "pera": {
+        "n": "Pera",
+        "grupo": "fruta",
+        "kcal": 57,
+        "p": 0.4,
+        "c": 15.2,
+        "g": 0.1,
+        "f": 3.1,
+        "fonte": "referência aproximada"
+      },
+      "laranja": {
+        "n": "Laranja",
+        "grupo": "fruta",
+        "kcal": 47,
+        "p": 0.9,
+        "c": 11.8,
+        "g": 0.1,
+        "f": 2.4,
+        "fonte": "referência aproximada"
+      },
+      "mamao": {
+        "n": "Mamão",
+        "grupo": "fruta",
+        "kcal": 43,
+        "p": 0.5,
+        "c": 10.8,
+        "g": 0.1,
+        "f": 1.7,
+        "fonte": "referência aproximada"
+      },
       "banana": {
         "n": "Banana-prata",
         "grupo": "fruta",
@@ -860,6 +1209,30 @@
         },
         "fonte": "TACO"
       },
+      "oleo_canola": {
+        "n": "Óleo de canola",
+        "grupo": "gordura",
+        "kcal": 884,
+        "p": 0,
+        "c": 0,
+        "g": 100,
+        "f": 0,
+        "fonte": "referência aproximada"
+      },
+      "pasta_amendoim": {
+        "n": "Pasta de amendoim integral",
+        "grupo": "gordura",
+        "kcal": 588,
+        "p": 25,
+        "c": 20,
+        "g": 50,
+        "f": 6,
+        "porcao": {
+          "nome": "colher pequena",
+          "g": 10
+        },
+        "fonte": "referência aproximada; conferir rótulo"
+      },
       "maionese_light": {
         "n": "Maionese light",
         "grupo": "molho",
@@ -873,6 +1246,16 @@
           "g": 12
         },
         "fonte": "FatSecret, Hellmann's light"
+      },
+      "requeijao_light": {
+        "n": "Requeijão light",
+        "grupo": "molho",
+        "kcal": 160,
+        "p": 10,
+        "c": 6,
+        "g": 10,
+        "f": 0,
+        "fonte": "estimativa; conferir rótulo"
       },
       "ketchup": {
         "n": "Ketchup",
@@ -888,6 +1271,16 @@
         },
         "fonte": "rótulo típico, aproximado"
       },
+      "molho_tomate": {
+        "n": "Molho de tomate simples",
+        "grupo": "molho",
+        "kcal": 29,
+        "p": 1.4,
+        "c": 5.6,
+        "g": 0.2,
+        "f": 1.5,
+        "fonte": "estimativa; conferir receita"
+      },
       "mostarda": {
         "n": "Mostarda",
         "grupo": "molho",
@@ -902,6 +1295,67 @@
         },
         "fonte": "rótulo típico, aproximado"
       },
+      "leite_po": {
+        "n": "Leite em pó desnatado",
+        "grupo": "laticinio",
+        "kcal": 354,
+        "p": 35,
+        "c": 52,
+        "g": 1,
+        "f": 0,
+        "fonte": "estimativa; conferir rótulo"
+      },
+      "acucar_mascavo": {
+        "n": "Açúcar mascavo",
+        "grupo": "carboidrato",
+        "kcal": 380,
+        "p": 0,
+        "c": 98,
+        "g": 0,
+        "f": 0,
+        "fonte": "estimativa; conferir rótulo"
+      },
+      "leite_condensado": {
+        "n": "Leite condensado",
+        "grupo": "laticinio",
+        "kcal": 321,
+        "p": 7.9,
+        "c": 54.4,
+        "g": 8.7,
+        "f": 0,
+        "fonte": "estimativa; conferir rótulo"
+      },
+      "leite_coco": {
+        "n": "Leite de coco",
+        "grupo": "gordura",
+        "unid": "ml",
+        "kcal": 200,
+        "p": 2,
+        "c": 3,
+        "g": 20,
+        "f": 0,
+        "fonte": "estimativa; conferir rótulo"
+      },
+      "coco_ralado": {
+        "n": "Coco ralado sem açúcar",
+        "grupo": "gordura",
+        "kcal": 660,
+        "p": 7,
+        "c": 24,
+        "g": 64,
+        "f": 16,
+        "fonte": "estimativa; conferir rótulo"
+      },
+      "canela": {
+        "n": "Canela em pó",
+        "grupo": "molho",
+        "kcal": 247,
+        "p": 4,
+        "c": 80,
+        "g": 1.2,
+        "f": 53,
+        "fonte": "estimativa; uso em pequenas quantidades"
+      },
       "omega3": {
         "n": "Ômega 3 (cápsula)",
         "grupo": "suplemento",
@@ -915,46 +1369,169 @@
         "fonte": "rótulo"
       }
     },
+    "substituicoes": {
+      "aveia": [
+        "farelo_aveia",
+        "farinha_aveia"
+      ],
+      "leite_desnatado": [
+        "leite_semidesnatado",
+        "leite_integral",
+        "leite_zero_lactose"
+      ],
+      "whey": [
+        "whey_isolado",
+        "proteina_ervilha"
+      ],
+      "iogurte": [
+        "skyr",
+        "iogurte_natural"
+      ],
+      "ricota": [
+        "cottage",
+        "minas_frescal"
+      ],
+      "cheddar_light": [
+        "mussarela",
+        "minas_frescal"
+      ],
+      "mussarela": [
+        "minas_frescal",
+        "cheddar_light"
+      ],
+      "frango": [
+        "tilapia",
+        "peru_assado",
+        "patinho"
+      ],
+      "patinho": [
+        "frango",
+        "tilapia",
+        "alcatra"
+      ],
+      "file_mignon": [
+        "patinho",
+        "frango"
+      ],
+      "alcatra": [
+        "patinho",
+        "frango",
+        "suino"
+      ],
+      "maminha": [
+        "alcatra",
+        "patinho"
+      ],
+      "salmao": [
+        "tilapia",
+        "sardinha",
+        "atum"
+      ],
+      "suino": [
+        "frango",
+        "tilapia"
+      ],
+      "patinho_cru": [
+        "frango_cru"
+      ],
+      "atum": [
+        "frango",
+        "sardinha"
+      ],
+      "ovo": [
+        "clara_ovo"
+      ],
+      "pao_integral": [
+        "pao_frances",
+        "wrap_integral",
+        "tapioca"
+      ],
+      "pao_brioche": [
+        "pao_integral",
+        "pao_frances"
+      ],
+      "arroz_integral": [
+        "arroz_branco",
+        "macarrao",
+        "batata_doce"
+      ],
+      "batata_doce": [
+        "batata_inglesa",
+        "mandioca",
+        "arroz_integral"
+      ],
+      "batata_prefrita": [
+        "batata_inglesa",
+        "batata_doce"
+      ],
+      "feijao": [
+        "lentilha",
+        "ervilha",
+        "grao_bico"
+      ],
+      "lentilha": [
+        "feijao",
+        "ervilha",
+        "grao_bico"
+      ],
+      "brocolis": [
+        "couve_flor",
+        "abobrinha",
+        "vagem"
+      ],
+      "tomate_cereja": [
+        "tomate",
+        "pepino"
+      ],
+      "cenoura_crua": [
+        "pepino",
+        "tomate"
+      ],
+      "cenoura_cozida": [
+        "vagem",
+        "abobrinha"
+      ],
+      "maca": [
+        "pera",
+        "laranja",
+        "mamao"
+      ],
+      "banana": [
+        "maca",
+        "mamao",
+        "pera"
+      ],
+      "azeite": [
+        "oleo_canola"
+      ],
+      "maionese_light": [
+        "requeijao_light",
+        "iogurte_natural"
+      ],
+      "ketchup": [
+        "molho_tomate"
+      ]
+    },
     "cardapios": {
       "treino": [
         {
           "id": "cafe",
-          "hora": "7h",
-          "nome": "Mingau",
+          "hora": "8h",
+          "nome": "Café da manhã",
           "itens": [
             {
               "a": "aveia",
-              "q": 100,
-              "alav": {
-                "min": 50,
-                "max": 130,
-                "passo": 10
-              }
+              "q": 40
             },
             {
               "a": "leite_desnatado",
-              "q": 300
-            },
-            {
-              "a": "whey",
-              "q": 30
-            }
-          ]
-        },
-        {
-          "id": "lanche1",
-          "hora": "10h30",
-          "nome": "Lanche",
-          "itens": [
-            {
-              "a": "maca",
-              "q": 150
+              "q": 200
             }
           ]
         },
         {
           "id": "almoco",
-          "hora": "13h",
+          "hora": "12h",
           "nome": "Almoço",
           "itens": [
             {
@@ -963,126 +1540,41 @@
             },
             {
               "a": "arroz_integral",
-              "q": 150,
-              "alav": {
-                "min": 100,
-                "max": 150,
-                "passo": 10
-              }
-            },
-            {
-              "a": "feijao",
-              "q": 100
+              "q": 120
             },
             {
               "a": "brocolis",
-              "q": 50
-            },
-            {
-              "a": "cenoura_crua",
-              "q": 50
-            },
-            {
-              "a": "azeite",
-              "q": 5
-            }
-          ]
-        },
-        {
-          "id": "lanche2",
-          "hora": "16h30",
-          "nome": "Sanduíche e iogurte",
-          "itens": [
-            {
-              "a": "pao_integral",
-              "q": 75,
-              "alav": {
-                "min": 25,
-                "max": 100,
-                "passo": 25
-              }
-            },
-            {
-              "a": "atum",
-              "q": 120
-            },
-            {
-              "a": "ricota",
-              "q": 75
-            },
-            {
-              "a": "ovo",
-              "q": 50
-            },
-            {
-              "a": "azeite",
-              "q": 5
-            },
-            {
-              "a": "maca",
-              "q": 150
-            },
-            {
-              "a": "iogurte",
-              "q": 140
-            }
-          ]
-        },
-        {
-          "id": "pre",
-          "hora": "18h30",
-          "nome": "Pré-treino",
-          "itens": [
-            {
-              "a": "banana",
-              "q": 120
+              "q": 100
             }
           ]
         },
         {
           "id": "jantar",
-          "hora": "21h",
+          "hora": "19h",
           "nome": "Jantar",
           "itens": [
             {
-              "a": "patinho",
+              "a": "tilapia",
               "q": 150
             },
             {
-              "a": "arroz_integral",
-              "q": 150,
-              "alav": {
-                "min": 100,
-                "max": 150,
-                "passo": 10
-              }
+              "a": "batata_doce",
+              "q": 180
             },
             {
-              "a": "feijao",
+              "a": "tomate",
               "q": 100
-            },
-            {
-              "a": "brocolis",
-              "q": 50
-            },
-            {
-              "a": "tomate_cereja",
-              "q": 50
-            },
-            {
-              "a": "azeite",
-              "q": 5
             }
           ]
         },
         {
-          "id": "supl",
-          "hora": "dia",
-          "nome": "Ômega 3",
+          "id": "pre",
+          "hora": "17h",
+          "nome": "Pré-treino",
           "itens": [
             {
-              "a": "omega3",
-              "q": 4
+              "a": "banana",
+              "q": 100
             }
           ]
         }
@@ -1090,42 +1582,22 @@
       "descanso": [
         {
           "id": "cafe",
-          "hora": "7h",
-          "nome": "Mingau",
+          "hora": "8h",
+          "nome": "Café da manhã",
           "itens": [
             {
               "a": "aveia",
-              "q": 100,
-              "alav": {
-                "min": 50,
-                "max": 130,
-                "passo": 10
-              }
+              "q": 40
             },
             {
               "a": "leite_desnatado",
-              "q": 300
-            },
-            {
-              "a": "whey",
-              "q": 30
-            }
-          ]
-        },
-        {
-          "id": "lanche1",
-          "hora": "10h30",
-          "nome": "Lanche",
-          "itens": [
-            {
-              "a": "maca",
-              "q": 150
+              "q": 200
             }
           ]
         },
         {
           "id": "almoco",
-          "hora": "13h",
+          "hora": "12h",
           "nome": "Almoço",
           "itens": [
             {
@@ -1134,115 +1606,30 @@
             },
             {
               "a": "arroz_integral",
-              "q": 150,
-              "alav": {
-                "min": 100,
-                "max": 150,
-                "passo": 10
-              }
-            },
-            {
-              "a": "feijao",
-              "q": 100
-            },
-            {
-              "a": "brocolis",
-              "q": 50
-            },
-            {
-              "a": "cenoura_crua",
-              "q": 50
-            },
-            {
-              "a": "azeite",
-              "q": 5
-            }
-          ]
-        },
-        {
-          "id": "lanche2",
-          "hora": "16h30",
-          "nome": "Sanduíche e iogurte",
-          "itens": [
-            {
-              "a": "pao_integral",
-              "q": 75,
-              "alav": {
-                "min": 25,
-                "max": 100,
-                "passo": 25
-              }
-            },
-            {
-              "a": "atum",
               "q": 120
             },
             {
-              "a": "ricota",
-              "q": 75
-            },
-            {
-              "a": "ovo",
-              "q": 50
-            },
-            {
-              "a": "azeite",
-              "q": 5
-            },
-            {
-              "a": "maca",
-              "q": 150
-            },
-            {
-              "a": "iogurte",
-              "q": 140
+              "a": "brocolis",
+              "q": 100
             }
           ]
         },
         {
           "id": "jantar",
-          "hora": "21h",
+          "hora": "19h",
           "nome": "Jantar",
           "itens": [
             {
-              "a": "patinho",
+              "a": "tilapia",
               "q": 150
             },
             {
-              "a": "arroz_integral",
-              "q": 150,
-              "alav": {
-                "min": 100,
-                "max": 150,
-                "passo": 10
-              }
+              "a": "batata_doce",
+              "q": 180
             },
             {
-              "a": "feijao",
+              "a": "tomate",
               "q": 100
-            },
-            {
-              "a": "brocolis",
-              "q": 50
-            },
-            {
-              "a": "tomate_cereja",
-              "q": 50
-            },
-            {
-              "a": "azeite",
-              "q": 5
-            }
-          ]
-        },
-        {
-          "id": "supl",
-          "hora": "dia",
-          "nome": "Ômega 3",
-          "itens": [
-            {
-              "a": "omega3",
-              "q": 4
             }
           ]
         }
@@ -1294,6 +1681,16 @@
         (r.itens || []).forEach(function(it, j){
           if(!p.alimentos[it.a]) e.push("cardápio " + c + ", " + r.id + ", item " + j + ": alimento " + it.a + " não existe");
           if(!(Number(it.q) > 0)) e.push("cardápio " + c + ", " + r.id + ", item " + j + ": quantidade inválida");
+        });
+      });
+    });
+    Object.keys(p.variacoesPorDia || {}).forEach(function(d){
+      const tipo = p.diasSemana[String(new Date(d + "T12:00:00").getDay())];
+      const card = p.cardapios[(p.tipos[tipo] || {}).cardapio] || [];
+      Object.keys(p.variacoesPorDia[d]).forEach(function(id){
+        if(!card.some(function(r){ return r.id === id; })) e.push("variação " + d + ": refeição " + id + " inexistente");
+        (p.variacoesPorDia[d][id] || []).forEach(function(it){
+          if(!p.alimentos[it.a] || !(Number(it.q) > 0)) e.push("variação " + d + ": alimento ou quantidade inválido");
         });
       });
     });
@@ -1359,13 +1756,17 @@
      descem, só nas refeições ainda abertas, até a meta. A carne não mexe. */
   function planoDoDia(d){
     const reg = dia(d) || { r:{} };
-    const cardapio = PLANO.cardapios[PLANO.tipos[tipoDoDia(d)].cardapio] || [];
+    const base = PLANO.cardapios[PLANO.tipos[tipoDoDia(d)].cardapio] || [];
+    const variacoes = (PLANO.variacoesPorDia || {})[d] || {};
+    const cardapio = base.map(function(r){ return variacoes[r.id] ? Object.assign({}, r, { itens:variacoes[r.id] }) : r; });
     const refs = cardapio.map(function(r){
       const salvo = reg.r && reg.r[r.id];
-      const itens = salvo && salvo.i
+      const pulada = !!(salvo && salvo.pulada);
+      const itens = pulada ? [] : salvo && salvo.i
         ? salvo.i.map(function(x){ return { a:x[0], q:x[1] }; })
         : r.itens.map(function(it){ return { a:it.a, q:it.q, alav:it.alav || null, base:it.q }; });
-      return { id:r.id, hora:r.hora, nome:r.nome, itens:itens, ok: !!(salvo && salvo.ok), fixa: !!salvo, extra:false };
+      return { id:r.id, hora:r.hora, nome:r.nome, itens:itens, ok: !!(salvo && salvo.ok && !pulada),
+        pulada:pulada, puladaKcal:pulada ? Number(salvo.kp || 0) : 0, fixa: !!salvo, extra:false };
     });
     (reg.x || []).forEach(function(x){
       refs.push({ id:x.id, hora:x.hora || "", nome:x.nome || "Extra", itens:(x.i || []).map(function(y){ return { a:y[0], q:y[1] }; }), ok: !!x.ok, fixa:true, extra:true });
@@ -1374,8 +1775,12 @@
     let resto = null;
     if(meta != null){
       const total = function(){ return refs.reduce(function(s, r){ return s + somar(r.itens).kcal; }, 0); };
-      let diff = meta - total();
-      const livres = refs.filter(function(r){ return !r.fixa; });
+      // Uma refeição explicitamente não realizada NÃO tem a energia realocada
+      // para as demais. Conserva a folga da refeição omitida na projeção.
+      const kcalNaoRealizadas = refs.reduce(function(s, r){ return s + (r.pulada ? r.puladaKcal : 0); }, 0);
+      const alvoProgramado = Math.max(0, meta - kcalNaoRealizadas);
+      let diff = alvoProgramado - total();
+      const livres = refs.filter(function(r){ return !r.fixa && !r.pulada; });
       // Dentro da tolerância (padrão 25 kcal, 1% da meta) não mexe: o erro
       // dos rótulos é maior que isso. Fora dela, a cada passo escolhe a
       // alavanca cujo degrau deixa o dia mais perto da meta, sempre no
@@ -1400,9 +1805,10 @@
         melhor.its.forEach(function(it){ it.q += it.alav.passo * sinal; });
         diff -= melhor.passoK;
       }
-      resto = Math.round(meta - total());
+      resto = Math.round(alvoProgramado - total());
     }
-    return { data:d, tipo:tipoDoDia(d), meta:meta, refs:refs, resto:resto };
+    return { data:d, tipo:tipoDoDia(d), meta:meta, refs:refs, resto:resto,
+      folga:meta == null ? null : Math.round(meta - refs.reduce(function(s, r){ return s + somar(r.itens).kcal; }, 0)) };
   }
   function totaisDia(pl){
     const plan = { kcal:0, p:0, c:0, g:0, f:0 }, reg = { kcal:0, p:0, c:0, g:0, f:0 };
@@ -1412,7 +1818,7 @@
     });
     return { plan:plan, reg:reg };
   }
-  function diaCompleto(d){ const pl = planoDoDia(d); return pl.refs.length > 0 && pl.refs.every(function(r){ return r.ok; }); }
+  function diaCompleto(d){ const pl = planoDoDia(d); return pl.refs.length > 0 && pl.refs.every(function(r){ return r.ok || r.pulada; }); }
 
   /* ================= GASTO ADAPTATIVO =================
      A taxa basal pela fórmula serve de referência. O que define a meta é o
@@ -1489,6 +1895,20 @@
     }
     salvarDias();
   }
+  function pularRef(d, ref){
+    if(ref.extra) return;
+    const reg = garantirDia(d);
+    reg.r[ref.id] = { i:ref.itens.map(function(it){ return [it.a, Math.round(it.q * 10) / 10]; }),
+      ok:false, pulada:true, kp:Math.round(somar(ref.itens).kcal), eraFixa:ref.fixa };
+    salvarDias();
+  }
+  function restaurarRef(d, ref){
+    const reg = garantirDia(d), salvo = reg.r[ref.id];
+    if(!salvo || !salvo.pulada) return;
+    if(salvo.eraFixa){ delete salvo.pulada; delete salvo.kp; delete salvo.eraFixa; }
+    else delete reg.r[ref.id];
+    salvarDias();
+  }
   function reabrirRef(d, ref){
     const reg = garantirDia(d);
     if(ref.extra){ reg.x = (reg.x || []).filter(function(y){ return y.id !== ref.id; }); }
@@ -1552,6 +1972,7 @@
     bloco(pl.meta != null ? num(pl.meta) : "–", "meta, kcal");
     bloco(num(tt.reg.kcal), "registrado");
     bloco(num(tt.plan.kcal), "no plano do dia");
+    bloco(pl.folga != null ? num(Math.abs(pl.folga)) : "–", pl.folga != null && pl.folga < 0 ? "excesso projetado, kcal" : "folga no plano, kcal");
     c.appendChild(big);
     const bar = el("div", "bar"); const ip = el("i", "plan"), ir = el("i");
     const base = Math.max(pl.meta || 1, tt.plan.kcal, 1);
@@ -1566,8 +1987,9 @@
     const info = el("p", "info");
     info.textContent = (pesoT ? "Proteína do plano: " + num(tt.plan.p / pesoT, 1) + " g por kg. " : "")
       + "Fibra do plano: " + num(tt.plan.f) + " g."
-      + (pl.resto != null && pl.resto > 60 ? " Aveia, pão e arroz chegaram ao máximo e ainda faltam " + num(pl.resto) + " kcal para a meta: acrescente um alimento ou aumente uma porção à mão." : "")
-      + (pl.resto != null && pl.resto < -60 ? " Aveia, pão e arroz chegaram ao mínimo e o plano ainda passa " + num(-pl.resto) + " kcal da meta: troque uma carne por outra mais magra ou corte uma porção à mão." : "");
+      + (pl.resto != null && pl.resto > 60 ? " Arroz e pão chegaram ao máximo e ainda faltam " + num(pl.resto) + " kcal para o planejamento: ajuste uma porção manualmente se houver fome." : "")
+      + (pl.resto != null && pl.resto < -60 ? " Arroz e pão chegaram ao mínimo e o plano ainda passa " + num(-pl.resto) + " kcal do alvo: ajuste uma porção manualmente." : "")
+      + " A folga considera as refeições previstas, inclusive as marcadas como não realizadas. Ela não altera a meta nem é obrigação de comer.";
     c.appendChild(info);
   }
 
@@ -1738,17 +2160,23 @@
     const pl = planoDoDia(diaAtual);
     pl.refs.forEach(function(r){
       const t = somar(r.itens);
-      const box = el("section", "meal" + (r.ok ? " ok" : ""));
+      const box = el("section", "meal" + (r.ok ? " ok" : "") + (r.pulada ? " pulada" : ""));
       const head = el("button", "meal-head"); head.type = "button";
       head.appendChild(el("span", "h", r.hora));
       head.appendChild(el("span", "t", r.nome));
-      const k = el("span", "k", num(t.kcal) + " kcal"); k.appendChild(el("small", null, r.ok ? "registrada" : (r.fixa ? "editada" : "prevista")));
+      const k = el("span", "k", num(t.kcal) + " kcal"); k.appendChild(el("small", null, r.pulada ? "não realizada" : (r.ok ? "registrada" : (r.fixa ? "editada" : "prevista"))));
       head.appendChild(k);
       const chave = diaAtual + ":" + r.id;
       head.addEventListener("click", function(){ abertas[chave] = !abertas[chave]; renderRefeicoes(); });
       box.appendChild(head);
       if(abertas[chave]){
         const body = el("div", "meal-body");
+        if(r.pulada){
+          body.appendChild(el("p", "info", "Refeição não realizada. Zero calorias registradas e nenhuma compensação automática em outros pratos."));
+          const bs = el("div", "btns");
+          bs.appendChild(botao("Restaurar refeição", "ghost", function(){ restaurarRef(diaAtual, r); render(); }));
+          body.appendChild(bs); box.appendChild(body); c.appendChild(box); return;
+        }
         r.itens.forEach(function(it, idx){
           const al = ALI[it.a] || { n:it.a };
           const row = el("div", "it");
@@ -1781,6 +2209,7 @@
         if(!r.ok) bs.appendChild(botao(r.fixa ? "Registrar assim" : "Comi como previsto", "", function(){ salvarRef(diaAtual, r, true); abertas[chave] = false; render(); }));
         else bs.appendChild(botao("Desfazer registro", "ghost", function(){ salvarRef(diaAtual, r, false); render(); }));
         bs.appendChild(botao("+ Alimento", "ghost", function(){ telaAdicionar(r); }));
+        if(!r.ok && !r.extra) bs.appendChild(botao("Não realizei", "ghost", function(){ pularRef(diaAtual, r); abertas[chave] = false; render(); }));
         if(r.fixa && !r.extra) bs.appendChild(botao("Voltar ao previsto", "ghost", function(){ reabrirRef(diaAtual, r); render(); }));
         if(r.extra) bs.appendChild(botao("Apagar refeição", "ghost", function(){ reabrirRef(diaAtual, r); render(); }));
         body.appendChild(bs);
@@ -1794,8 +2223,10 @@
     const pl = planoDoDia(diaAtual), tt = totaisDia(pl);
     const d = $("dock-txt"); d.textContent = "";
     const falta = pl.meta != null ? pl.meta - tt.reg.kcal : null;
-    d.appendChild(el("b", null, falta == null ? num(tt.reg.kcal) + " kcal" : (falta >= 0 ? "Faltam " + num(falta) : "Passou " + num(-falta)) + " kcal"));
-    d.appendChild(document.createTextNode("P " + num(tt.reg.p) + " · C " + num(tt.reg.c) + " · G " + num(tt.reg.g)));
+    d.appendChild(el("b", null, pl.folga == null ? num(tt.reg.kcal) + " kcal" :
+      (pl.folga >= 0 ? "Folga no plano: " + num(pl.folga) : "Excesso no plano: " + num(-pl.folga)) + " kcal"));
+    d.appendChild(document.createTextNode((falta == null ? "Sem meta" : falta >= 0 ? "Restante até a meta: " + num(falta) + " kcal" : "Consumido além da meta: " + num(-falta) + " kcal")
+      + " · P " + num(tt.reg.p) + " · C " + num(tt.reg.c) + " · G " + num(tt.reg.g)));
     $("btn-fechar").textContent = dia(diaAtual) && dia(diaAtual).f ? "Dia fechado" : "Fechar o dia";
     $("status").textContent = "Dados neste aparelho · plano: " + (PLANO.versao || "") + " (" + CARREGADO.origem + ")";
   }
@@ -1816,7 +2247,9 @@
     const al = ALI[a]; if(!al) return [];
     const crit = (PLANO.trocaPor || {})[al.grupo] || "kcal";
     const ref = macros(a, q);
-    return Object.keys(ALI).filter(function(b){ return b !== a && ALI[b].grupo === al.grupo && (ALI[b].base || "g") === (al.base || "g"); }).map(function(b){
+    const curadas = (PLANO.substituicoes || {})[a];
+    const candidatos = curadas && curadas.length ? curadas : Object.keys(ALI).filter(function(b){ return ALI[b].grupo === al.grupo; });
+    return candidatos.filter(function(b){ return b !== a && ALI[b] && (ALI[b].base || "g") === (al.base || "g"); }).map(function(b){
       const bl = ALI[b]; const por1 = macros(b, bl.base === "un" ? 1 : 100);
       let qb;
       if(crit === "peso") qb = q;
@@ -1826,7 +2259,7 @@
       qb = bl.base === "un" ? Math.round(qb) : Math.round(qb / 5) * 5;
       const m = macros(b, qb);
       return { a:b, q:qb, m:m, dk:m.kcal - ref.kcal, dg:m.g - ref.g };
-    }).filter(Boolean).sort(function(x, y){ return x.m.kcal - y.m.kcal; });
+    }).filter(function(e){ return e && e.q > 0; });
   }
   function rotuloCrit(a){ const c = (PLANO.trocaPor || {})[(ALI[a] || {}).grupo] || "kcal"; return c === "p" ? "mesma proteína" : c === "c" ? "mesmo carboidrato" : c === "peso" ? "mesmo peso" : "mesmas calorias"; }
   function telaTroca(r, idx){
@@ -1992,7 +2425,7 @@
   function telaFechar(){
     const pl = planoDoDia(diaAtual), tt = totaisDia(pl);
     const c = folha("Fechar " + (diaAtual === HOJE ? "o dia" : br(diaAtual)));
-    const pend = pl.refs.filter(function(r){ return !r.ok; });
+    const pend = pl.refs.filter(function(r){ return !r.ok && !r.pulada; });
     c.appendChild(el("p", "info", "Registrado: " + num(tt.reg.kcal) + " kcal de " + (pl.meta != null ? num(pl.meta) : "–") + ". Proteína " + num(tt.reg.p) + " g, carboidrato " + num(tt.reg.c) + " g, gordura " + num(tt.reg.g) + " g."));
     const st = el("p", "info"); const caixa = el("div", "btns");
     function concluir(registrarPendentes){
@@ -2041,7 +2474,10 @@
       const pl = planoDoDia(dFoco);
       L.push("## Dia " + br(dFoco) + " · " + (PLANO.tipos[pl.tipo] || {}).nome, "");
       const linhas = [];
-      pl.refs.forEach(function(r){ r.itens.forEach(function(it){ const m = macros(it.a, it.q); linhas.push([r.hora + " " + r.nome, (ALI[it.a] || {}).n || it.a, num(it.q) + " " + unid(it.a), num(m.kcal), num(m.p, 1), num(m.c, 1), num(m.g, 1), r.ok ? "sim" : "não"]); }); });
+      pl.refs.forEach(function(r){
+        if(r.pulada) linhas.push([r.hora + " " + r.nome, "Não realizada", "–", "0", "0", "0", "0", "não realizada"]);
+        r.itens.forEach(function(it){ const m = macros(it.a, it.q); linhas.push([r.hora + " " + r.nome, (ALI[it.a] || {}).n || it.a, num(it.q) + " " + unid(it.a), num(m.kcal), num(m.p, 1), num(m.c, 1), num(m.g, 1), r.ok ? "sim" : "não"]); });
+      });
       L.push(tabela(["Refeição","Alimento","Quant.","kcal","P","C","G","Registrado"], linhas));
     }
     L.push("## Últimos 28 dias", "");
