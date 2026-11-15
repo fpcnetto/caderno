@@ -2,7 +2,7 @@
    Guarda o app no aparelho para abrir sem internet. Os registros de comida e
    peso NÃO passam por aqui: ficam no localStorage do navegador.
    Ao publicar uma versão nova do index.html, troque o número do CACHE. */
-const CACHE = "mdf-v4";
+const CACHE = "mdf-v5";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
