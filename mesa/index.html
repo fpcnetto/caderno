@@ -1704,7 +1704,20 @@
     Object.keys(p.alimentos).forEach(function(id){
       const a = p.alimentos[id];
       if(!a || !a.n) e.push("alimento " + id + " sem nome (n)");
-      ["kcal","p","c","g"].forEach(function(k){ if(!a || !isFinite(Number(a[k]))) e.push("alimento " + id + " sem número em " + k); });
+      if(a && a.receita){
+        const rec = a.receita;
+        if(a.base !== "un") e.push("receita " + id + " precisa de base 'un' (porção)");
+        if(!Number.isInteger(rec.rendimento) || rec.rendimento < 1 || rec.rendimento > 1000)
+          e.push("receita " + id + ": rendimento inválido");
+        if(!Array.isArray(rec.itens) || !rec.itens.length) e.push("receita " + id + ": faltam ingredientes");
+        (Array.isArray(rec.itens) ? rec.itens : []).forEach(function(it, i){
+          const base = it && p.alimentos[it.a];
+          if(!base || base.receita) e.push("receita " + id + ", item " + i + ": ingrediente básico inexistente ou outra receita");
+          if(!it || !(Number(it.q) > 0) || !isFinite(Number(it.q))) e.push("receita " + id + ", item " + i + ": quantidade inválida");
+        });
+      } else {
+        ["kcal","p","c","g"].forEach(function(k){ if(!a || !isFinite(Number(a[k]))) e.push("alimento " + id + " sem número em " + k); });
+      }
     });
     Object.keys(p.tipos).forEach(function(t){
       const tp = p.tipos[t];
@@ -1759,6 +1772,18 @@
   /* ================= NUTRIÇÃO ================= */
   function macros(a, q){
     const al = ALI[a]; if(!al) return { kcal:0, p:0, c:0, g:0, f:0 };
+    if(al.receita){
+      // Ingredientes da receita completa; q é o NÚMERO de porções usadas.
+      // O validador não permite receitas aninhadas, evitando ciclos.
+      const total = { kcal:0, p:0, c:0, g:0, f:0 };
+      al.receita.itens.forEach(function(it){
+        const m = macros(it.a, it.q);
+        ["kcal","p","c","g","f"].forEach(function(k){ total[k] += m[k]; });
+      });
+      const proporcao = q / al.receita.rendimento;
+      ["kcal","p","c","g","f"].forEach(function(k){ total[k] *= proporcao; });
+      return total;
+    }
     const m = al.base === "un" ? q : q / 100;
     return { kcal: al.kcal * m, p: al.p * m, c: al.c * m, g: al.g * m, f: (al.f || 0) * m };
   }
@@ -2573,7 +2598,7 @@
       Object.keys(ALI).filter(function(a){ return !t || ALI[a].n.toLowerCase().indexOf(t) >= 0; }).forEach(function(a){
         const al = ALI[a]; const b = el("button"); b.type = "button";
         b.appendChild(el("span", null, al.n));
-        b.appendChild(el("small", null, num(al.kcal) + " kcal/" + (al.base === "un" ? "un" : "100 " + unid(a)) + (al.porcao ? " · " + al.porcao.nome + " " + al.porcao.g : "")));
+        b.appendChild(el("small", null, num(macros(a, al.base === "un" ? 1 : 100).kcal) + " kcal/" + (al.base === "un" ? unid(a) : "100 " + unid(a)) + (al.porcao ? " · " + al.porcao.nome + " " + al.porcao.g : "")));
         b.addEventListener("click", function(){
           const v = lerNum(q.value); const qq = v > 0 ? v : (al.porcao ? al.porcao.g : (al.base === "un" ? 1 : 100));
           r.itens.push({ a:a, q:qq }); salvarRef(diaAtual, r, r.ok); fechar(); render();
@@ -2602,9 +2627,10 @@
       // Proteína: fontes em que a proteína dá ao menos 30% das calorias.
       // Carboidrato: fontes em que o carboidrato dá ao menos 50%, sem legumes e molhos.
       const serve = function(a){
-        const al = ALI[a]; if(!(al.kcal > 0)) return false;
-        if(modo === "p") return al.p * 4 / al.kcal >= 0.3;
-        if(modo === "c") return al.c * 4 / al.kcal >= 0.5 && al.grupo !== "legume" && al.grupo !== "molho";
+        const al = ALI[a], ref = macros(a, al.base === "un" ? 1 : 100);
+        if(!(ref.kcal > 0)) return false;
+        if(modo === "p") return ref.p * 4 / ref.kcal >= 0.3;
+        if(modo === "c") return ref.c * 4 / ref.kcal >= 0.5 && al.grupo !== "legume" && al.grupo !== "molho";
         return al.base !== "un";
       };
       const tb = el("table", "tab"); const th = el("tr");
@@ -3018,7 +3044,7 @@
     const nativo = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === "function" && window.Capacitor.isNativePlatform());
     if(!nativo && "serviceWorker" in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(function(){});
   }catch(e){}
-  window.__mdf = { caminhadasDoSamsung:caminhadasDoSamsung, instanteLocal:instanteLocal, importarSamsungTexto:importarSamsungTexto, planoDoDia:planoDoDia, totaisDia:totaisDia, estimarGasto:estimarGasto, equivalentes:equivalentes, montarBackupMd:montarBackupMd, extrairBackup:extrairBackup, ajusteAtividadeDia:ajusteAtividadeDia, deficitDoDia:deficitDoDia };
+  window.__mdf = { caminhadasDoSamsung:caminhadasDoSamsung, instanteLocal:instanteLocal, importarSamsungTexto:importarSamsungTexto, planoDoDia:planoDoDia, totaisDia:totaisDia, estimarGasto:estimarGasto, equivalentes:equivalentes, montarBackupMd:montarBackupMd, extrairBackup:extrairBackup, ajusteAtividadeDia:ajusteAtividadeDia, deficitDoDia:deficitDoDia, macros:macros, validarPlano:validarPlano };
 })();
 </script>
 </body>
